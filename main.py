@@ -143,8 +143,18 @@ def analyze_data(df):
         print(f"  Std Dev (Overload)        : {np.std(fault):.4f} Hz")
         print(f"  Std Dev (No Fault)        : {np.std(no_fault):.4f} Hz")
 
+        # Inferential Statistics: Independent t-test
+        t_stat, p_value = stats.ttest_ind(fault, no_fault)
+        print(f"\n  Independent t-test (Overload vs No Fault):")
+        print(f"  t-statistic : {t_stat:.4f}")
+        print(f"  p-value     : {p_value:.4f}")
+        if p_value < 0.05:
+            print(f"  Result: Significant difference (p < 0.05)")
+        else:
+            print(f"  Result: No significant difference (p ≥ 0.05)")
+
         print("\n  ✔ Analysis complete!")
-        return mean, median, std, var, skew, kurt, outliers, corr_v, corr_c, corr_p, fault, no_fault
+        return mean, median, std, var, skew, kurt, outliers, corr_v, corr_c, corr_p, fault, no_fault, t_stat, p_value
 
     except Exception as e:
         print(f"✘ Analysis error: {e}")
@@ -205,16 +215,6 @@ def visualize_static(df):
 
     except Exception as e:
         print(f"✘ Visualization error: {e}")
-
-# ============================================================
-# MAIN EXECUTION
-# ============================================================
-
-if __name__ == "__main__":
-    df = load_data(DATA_PATH)
-    df = clean_data(df)
-    results = analyze_data(df)
-    visualize_static(df)
 
 # ============================================================
 # MODULE 5: VISUALIZATION (ANIMATED GRAPHS)
