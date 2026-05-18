@@ -10,6 +10,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 from scipy import stats
 import os
+import time
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -298,8 +299,26 @@ def visualize_animated(df):
 # ============================================================
 
 if __name__ == "__main__":
+    pipeline_start = time.time()
+
+    t1 = time.time()
     df = load_data(DATA_PATH)
+    print(f"  ⏱ Ingestion time: {time.time() - t1:.4f}s")
+
+    t2 = time.time()
     df = clean_data(df)
+    print(f"  ⏱ Cleaning time: {time.time() - t2:.4f}s")
+
+    t3 = time.time()
     results = analyze_data(df)
+    print(f"  ⏱ Analysis time: {time.time() - t3:.4f}s")
+
+    t4 = time.time()
     visualize_static(df)
+    print(f"  ⏱ Static visualization time: {time.time() - t4:.4f}s")
+
+    t5 = time.time()
     visualize_animated(df)
+    print(f"  ⏱ Animation time: {time.time() - t5:.4f}s")
+
+    print(f"\n  ✔ Total pipeline execution time: {time.time() - pipeline_start:.4f}s")
